@@ -1,0 +1,7 @@
+{
+  "port": 3000,
+  "target": "http://localhost:8080",
+  "devices": ["iphone-14", "pixel-7", "ipad-pro"],
+  "open": true,
+  "throttleNetwork": false
+}
