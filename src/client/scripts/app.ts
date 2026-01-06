@@ -178,8 +178,9 @@ class DeviceEmulator {
     // Apply target change
     document.getElementById('apply-target')?.addEventListener('click', () => {
       const t = this.getTargetUrl();
-      document.querySelectorAll('#preview-area iframe').forEach((iframe) => {
-        (iframe as HTMLIFrameElement).src = `/proxy?target=${encodeURIComponent(t)}`;
+      document.querySelectorAll('#preview-area iframe').forEach((el) => {
+        const iframe = el as HTMLIFrameElement;
+        iframe.src = `/proxy?target=${encodeURIComponent(t)}`;
       });
     });
   }

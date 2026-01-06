@@ -2,48 +2,65 @@ import { DeviceFrameOptions } from '../index';
 import { DEVICE_SPECS } from '../utils/device-specs';
 
 export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
+  const initial = {
+    targetUrl: options.targetUrl,
+    devices: DEVICE_SPECS,
+    framework: options.framework,
+    performance: options.performance,
+    screenshots: options.screenshots,
+    networkThrottle: options.networkThrottle
+  };
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeviceFrame Pro - Ultimate Device Emulator</title>
-    <style>
-      /* Minimal styles copied from the earlier template for brevity */
-      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial; margin:0; padding:20px; background: linear-gradient(135deg,#667eea,#764ba2);} 
-      .devices-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(350px,1fr)); gap:20px; }
-      .device-card { background:white; border-radius:12px; padding:16px; box-shadow:0 6px 18px rgba(0,0,0,0.12);} 
-      .device-bezel{ background:#111; border-radius:20px; padding:12px; color:white; }
-      .device-screen{ width:100%; height:400px; border:none; display:block; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DeviceFrame Pro - Emulator</title>
+  <link rel="stylesheet" href="/styles/main.css" />
+  <style>
+    /* minimal fallback styles */
+    body { margin:0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial; background: #f3f6fb; }
+    .container{ display:flex; height:100vh; }
+    .sidebar{ width:320px; padding:20px; background:#fff; box-shadow:2px 0 12px rgba(0,0,0,0.05); overflow:auto }
+    .main-content{ flex:1; padding:20px; display:flex; flex-direction:column }
+    .preview-area{ display:grid; grid-template-columns: repeat(2,1fr); gap:16px; align-content:flex-start; overflow:auto }
+    .device-list{ margin-top:8px }
+    .status-bar{ margin-top:auto; display:flex; gap:12px; align-items:center }
+  </style>
 </head>
 <body>
-  <h1>DeviceFrame Pro</h1>
-  <div>
-    <input id="targetUrl" value="${options.targetUrl}" style="width:70%" />
-    <button onclick="updateUrl()">Update</button>
-    <button onclick="reloadAll()">Reload All</button>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Device Library</h2>
+      <p class="subtitle">Select devices to add to preview</p>
+      <div id="device-list" class="device-list"></div>
+
+      <div style="margin-top:20px">
+        <label for="target-url">Target URL</label>
+        <input id="target-url" class="url-input" value="${options.targetUrl}" style="width:100%" />
+        <div style="margin-top:8px">
+          <button id="apply-target">Apply</button>
+          <button id="open-qr">QR</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div id="preview-area" class="preview-area"></div>
+      <div class="status-bar">
+        <div><span id="device-count">0 devices</span></div>
+        <div style="margin-left:auto">DeviceFrame Pro</div>
+      </div>
+    </main>
   </div>
-  <div id="devicesGrid" class="devices-grid"></div>
 
   <script>
-    async function init(){
-      const res = await fetch('/api/config');
-      const cfg = await res.json();
-      const grid = document.getElementById('devicesGrid');
-      grid.innerHTML = cfg.devices.map(d => `
-        <div class="device-card">
-          <div class="device-bezel">
-            <div style="font-weight:700">${'${d.name}'}</div>
-            <iframe class="device-screen" src="${cfg.targetUrl}" ></iframe>
-          </div>
-        </div>
-      `).join('');
-    }
-    function updateUrl(){fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({targetUrl:document.getElementById('targetUrl').value})}).then(()=>location.reload());}
-    function reloadAll(){ document.querySelectorAll('iframe').forEach(f=>{f.src=f.src}); }
-    init();
+    // initial config injected for client script
+    window.__DEVICEFRAME_INITIAL = ${JSON.stringify(initial)};
   </script>
+
+  <script defer src="/bundle.js"></script>
 </body>
 </html>`;
 }

@@ -38,7 +38,33 @@ export class DeviceFrameServer {
     this.app.use(compression());
     this.app.use(cors());
     this.app.use(express.json());
-    this.app.use(express.static('public'));
+
+    // Serve built client assets (dist/client when compiled)
+    const clientRoot = require('path').join(__dirname, 'client');
+    this.app.use(express.static(clientRoot));
+
+    // Add proxy support so iframe `/proxy?target=` works (overrides default target when provided)
+    try {
+      // require dynamically so dev environments without the package don't crash at import time
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { createProxyMiddleware } = require('http-proxy-middleware');
+
+      this.app.use('/proxy', (req, res, next) => {
+        const target = (req.query && (req.query.target as string)) || this.options.targetUrl;
+        const proxy = createProxyMiddleware({
+          target,
+          changeOrigin: true,
+          ws: true,
+          logLevel: 'warn',
+          pathRewrite: (pathToRewrite: string) => pathToRewrite.replace(/^\/proxy/, '')
+        });
+        return proxy(req, res, next);
+      });
+    } catch (err) {
+      // If http-proxy-middleware is not installed, provide a graceful message
+      console.warn('http-proxy-middleware not available; /proxy endpoint will not work. Install it to enable proxying.');
+    }
+
     // Security headers
     this.app.use((req, res, next) => {
       res.setHeader('X-Content-Type-Options', 'nosniff');

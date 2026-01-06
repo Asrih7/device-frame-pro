@@ -59,8 +59,8 @@ export async function detectDevServer(framework: FrameworkInfo): Promise<string>
   const availablePort = await detectPort(port);
   
   if (availablePort !== port) {
-    console.warn(`⚠️  Port ${port} is available. Make sure to run: ${framework.devCommand}`);
+    console.warn(`⚠️  Port ${port} appears to be in use. Detected an available port: ${availablePort}. Make sure to run: ${framework.devCommand}`);
   }
   
-  return `http://localhost:${port}`;
+  return `http://localhost:${availablePort}`;
 }
