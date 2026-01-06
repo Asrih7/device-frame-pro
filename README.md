@@ -18,17 +18,17 @@ The ultimate realistic device emulator with native-like frames for all frontend 
 
 ### Global (Recommended)
 ```bash
-npm install -g deviceframe-pro
+npm install -g device-emulator-tool
 ```
 
 ### Project
 ```bash
-npm install --save-dev deviceframe-pro
+npm install --save-dev device-emulator-tool
 ```
 
 ### NPX (No installation)
 ```bash
-npx deviceframe-pro
+npx device-emulator-tool
 ```
 
 ## 🚀 Quick Start
