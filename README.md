@@ -1,67 +1,145 @@
-# DeviceFrame Pro (packaged as `device-emulator-tool`)
+# 🚀 DeviceFrame Pro
 
-DeviceFrame Pro is a realistic, high-performance multi-device emulator packaged under **device-emulator-tool** to keep backward compatibility.
+The ultimate realistic device emulator with native-like frames for all frontend frameworks.
 
-## Quick start
+## ✨ Features
 
-1. Install as a dev dependency in your project:
+- 📱 **12+ Realistic Device Frames** with accurate bezels, notches, and home indicators
+- 🎨 **Native-Like UI** - iOS, Android, Desktop with status bars
+- ⚡ **High Performance** - Optimized rendering with GPU acceleration
+- 🔄 **Live Reload** - Auto-sync across all devices
+- 📸 **Screenshots** - Capture each device individually
+- 🌐 **Universal Support** - React, Vue, Angular, Next.js, Nuxt, Svelte, Ionic
+- 📲 **QR Code** - Test on real devices instantly
+- ⌨️ **Keyboard Shortcuts** - Fast workflow
+- 📊 **Performance Monitoring** - FPS, Memory, Load times
 
+## 📦 Installation
+
+### Global (Recommended)
 ```bash
-npm install --save-dev device-emulator-tool
+npm install -g deviceframe-pro
 ```
 
-2. Start your app (e.g., `npm run dev` or `npm start`).
-
-3. Run the emulator (global or npx):
-
+### Project
 ```bash
-npx device-emulator --target http://localhost:3000 --port 4300
-# or after installing globally:
-# device-emulator --target http://localhost:3000 --port 4300
+npm install --save-dev deviceframe-pro
 ```
 
-The server will open a browser showing a modern UI with realistic device frames. Use the controls to add devices, update the target URL, generate QR codes, and capture screenshots.
-
-## Developer workflow
-
-- Build (compile TypeScript and copy assets):
-
+### NPX (No installation)
 ```bash
-npm run build
+npx deviceframe-pro
 ```
 
-- Development (watch TypeScript):
+## 🚀 Quick Start
 
 ```bash
-npm run dev
+# Start your app
+npm start
+
+# In another terminal
+deviceframe
 ```
 
-- Start the built server:
+## 📱 Supported Devices
 
+### iOS
+- iPhone 14 Pro / Pro Max (with Dynamic Island)
+- iPhone SE
+- iPad Pro 12.9"
+- iPad Air
+
+### Android
+- Samsung Galaxy S23 / S23 Ultra
+- Google Pixel 7 / 7 Pro
+- Samsung Galaxy Tab S8
+
+### Desktop
+- 1920×1080 Desktop
+- MacBook Pro 16"
+
+## 🛠️ CLI Options
+
+```
+deviceframe [options]
+
+Options:
+  -p, --port <number>      Preview server port (default: 4300)
+  -t, --target <url>       Target app URL (auto-detected)
+  -f, --framework <name>   Framework type
+  --qr                     Generate QR code
+  --perf                   Enable performance monitoring
+  --screenshots            Enable screenshot capture
+  -d, --devices <list>     Filter specific devices
+  --no-open               Don't auto-open browser
+```
+
+## 📖 Examples
+
+### Basic Usage
+```
+deviceframe
+```
+
+### With Performance Monitoring
+```
+deviceframe --perf --qr
+```
+
+### Specific Devices Only
+```
+deviceframe --devices iphone-14-pro,ipad-pro-12,galaxy-s23
+```
+
+### Custom Port & Target
+```
+deviceframe --port 5000 --target http://localhost:8080
+```
+
+## ⌨️ Keyboard Shortcuts
+
+- **R** - Reload all devices
+- **Q** - Toggle QR code
+- **S** - Take screenshots of all devices
+
+## 🎯 Framework Examples
+
+### React
 ```bash
 npm start
+deviceframe
 ```
 
-## CLI options
+### Vue
+```bash
+npm run serve
+deviceframe --framework vue
+```
 
-- `-p, --port`  : Preview server port (default: 4300)
-- `-t, --target`: Target app URL (auto-detected if omitted)
-- `--no-open`   : Do not auto-open the browser
-- `--qr`        : Generate QR code
-- `--perf`      : Enable performance monitoring
-- `--screenshots`: Enable screenshots (placeholder implementation)
-- `-d, --devices`: Comma-separated device IDs to show by default
+### Angular
+```bash
+ng serve
+deviceframe --framework angular
+```
 
-## Project layout (key files)
+### Next.js
+```bash
+npm run dev
+deviceframe --framework nextjs
+```
 
-- `src/cli.ts` - CLI implementation (TypeScript)
-- `src/server.ts` - Express server + WebSocket + APIs
-- `src/templates/preview.html.ts` - HTML UI template
-- `src/utils/device-specs.ts` - Device definitions
+## 📸 Screenshots
 
-## Notes
+All screenshots are saved to: `./screenshots/`
 
-This replacement provides a modern TypeScript implementation named DeviceFrame Pro while preserving the npm package name `device-emulator-tool` and the `device-emulator` CLI command.
+## 🤝 Contributing
 
-If you want me to continue, next I will run `npm install` and `npm run build`, fix any build issues, then commit & push the `feature/deviceframe-pro` branch and open a PR for review.
+Contributions welcome! Please open an issue or PR.
 
+## 📄 License
+
+MIT © 2026
+
+## 🌟 Star on GitHub
+
+If you find this useful, please star the repo!

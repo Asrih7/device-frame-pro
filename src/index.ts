@@ -1,5 +1,5 @@
-import DeviceFrameServer from './server';
-import { DEVICE_SPECS, DeviceSpec, getDeviceById, getDevicesByType } from './utils/device-specs';
+import { DeviceFrameServer } from './server';
+import { DEVICE_SPECS, DeviceSpec } from './utils/device-specs';
 
 export interface DeviceFrameOptions {
   port?: number;
@@ -15,8 +15,8 @@ export interface DeviceFrameOptions {
 
 export async function startDeviceFrame(options: DeviceFrameOptions = {}) {
   const server = new DeviceFrameServer(options);
-  await server.start();
-  return server;
+  return await server.start();
 }
 
-export { DeviceFrameServer, DEVICE_SPECS, DeviceSpec, getDeviceById, getDevicesByType };
+export { DeviceFrameServer, DEVICE_SPECS, DeviceSpec };
+export * from './utils/device-specs';
