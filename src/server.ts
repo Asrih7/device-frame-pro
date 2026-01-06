@@ -5,7 +5,7 @@ import compression from 'compression';
 import cors from 'cors';
 import open from 'open';
 import QRCode from 'qrcode';
-import { DeviceFrameOptions } from './index';
+import { DeviceFrameOptions } from '.';
 import { getPreviewHTML } from './templates/preview.html';
 import { DEVICE_SPECS } from './utils/device-specs';
 

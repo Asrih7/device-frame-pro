@@ -1,10 +1,12 @@
-import { DeviceFrameOptions } from '../index';
+import { DeviceFrameOptions } from "..";
 import { DEVICE_SPECS } from '../utils/device-specs';
 
 export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
+  const devices = (options.devices && options.devices.length > 0) ? DEVICE_SPECS.filter(d => options.devices.includes(d.id)) : DEVICE_SPECS;
+
   const initial = {
     targetUrl: options.targetUrl,
-    devices: DEVICE_SPECS,
+    devices,
     framework: options.framework,
     performance: options.performance,
     screenshots: options.screenshots,
