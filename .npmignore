@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Source files (only dist/ is needed)
+src/
+tsconfig.json
+webpack.config.js
+.gitignore
+
+# Development
+.env
+.env.*
+.git
+.github/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Config
+.device-emulator.json

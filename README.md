@@ -1,6 +1,6 @@
-# Multi Device Emulator
+# DeviceFrame Pro (packaged as `device-emulator-tool`)
 
-A framework-agnostic device emulator you can add to any web project to preview your running app in multiple device frames (iOS, Android, tablets, desktops).
+DeviceFrame Pro is a realistic, high-performance multi-device emulator packaged under **device-emulator-tool** to keep backward compatibility.
 
 ## Quick start
 
@@ -15,22 +15,22 @@ npm install --save-dev device-emulator-tool
 3. Run the emulator (global or npx):
 
 ```bash
-npx device-emulator start --target http://localhost:3000 --port 4000
+npx device-emulator --target http://localhost:3000 --port 4300
 # or after installing globally:
-# device-emulator start --target http://localhost:3000 --port 4000
+# device-emulator --target http://localhost:3000 --port 4300
 ```
 
-This opens `http://localhost:4000` and shows a UI where you can add multiple device previews that are proxied to your app (via `/proxy`).
+The server will open a browser showing a modern UI with realistic device frames. Use the controls to add devices, update the target URL, generate QR codes, and capture screenshots.
 
 ## Developer workflow
 
-- Build (client + server):
+- Build (compile TypeScript and copy assets):
 
 ```bash
 npm run build
 ```
 
-- Development (runs webpack watch + tsc watch):
+- Development (watch TypeScript):
 
 ```bash
 npm run dev
@@ -44,18 +44,24 @@ npm start
 
 ## CLI options
 
-- `--port, -p`  : Emulator server port (default: 3000)
-- `--target, -t`: Target app URL (default: http://localhost:8080)
-- `--open, -o`  : Open browser automatically (default: true)
+- `-p, --port`  : Preview server port (default: 4300)
+- `-t, --target`: Target app URL (auto-detected if omitted)
+- `--no-open`   : Do not auto-open the browser
+- `--qr`        : Generate QR code
+- `--perf`      : Enable performance monitoring
+- `--screenshots`: Enable screenshots (placeholder implementation)
+- `-d, --devices`: Comma-separated device IDs to show by default
 
 ## Project layout (key files)
 
-- `src/cli` - CLI implementation (TypeScript)
-- `src/server` - Express server + proxy, WebSocket hooks
-- `src/client` - Client UI (HTML/CSS/TS) built with Webpack
-- `src/emulators/devices.ts` - Device presets
+- `src/cli.ts` - CLI implementation (TypeScript)
+- `src/server.ts` - Express server + WebSocket + APIs
+- `src/templates/preview.html.ts` - HTML UI template
+- `src/utils/device-specs.ts` - Device definitions
 
-## Notes & next steps
+## Notes
 
-This upgrade converts the project to TypeScript, adds a client build via Webpack and improves the UI and device presets. Consider adding features like network throttling, screenshots, console forwarding, and test integration (Cypress/Jest) for a production-ready tool.
+This replacement provides a modern TypeScript implementation named DeviceFrame Pro while preserving the npm package name `device-emulator-tool` and the `device-emulator` CLI command.
+
+If you want me to continue, next I will run `npm install` and `npm run build`, fix any build issues, then commit & push the `feature/deviceframe-pro` branch and open a PR for review.
 
