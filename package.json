@@ -43,7 +43,7 @@
     "url": "https://github.com/Asrih7/device-frame-pro"
   },
  
-  "homepage": "https://github.com/yourusername/deviceframe-pro#readme",
+  "homepage": "https://github.com/Asrih7/device-frame-pro/blob/main/README.md",
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
