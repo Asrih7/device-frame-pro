@@ -84,12 +84,7 @@ async function main() {
         if (options.screenshots) {
           console.log(chalk.cyan('📸 Screenshots:  ') + chalk.white.bold('ENABLED'));
         }
-        
-        console.log(chalk.gray('\n\nKeyboard Shortcuts:'));
-        console.log(chalk.gray('  R - Reload all devices'));
-        console.log(chalk.gray('  S - Take screenshots'));
-        console.log(chalk.gray('  Q - Generate QR code'));
-        console.log(chalk.gray('  Ctrl+C - Stop server\n'));
+      
         
       } catch (err: any) {
         console.error(chalk.red('\n❌ Error:'), err.message);

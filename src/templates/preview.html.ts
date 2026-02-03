@@ -2,6 +2,9 @@ import { DeviceFrameOptions } from '../index';
 import { DEVICE_SPECS } from '../utils/device-specs';
 
 export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
+  // Include devices directly from DEVICE_SPECS
+  const devicesJson = JSON.stringify(DEVICE_SPECS);
+  
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,41 +36,40 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
                          'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-gradient);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
             overflow-x: hidden;
         }
         
-        /* Header Section */
-        .main-header {
+        /* Main Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        /* Sidebar */
+        .sidebar {
             background: var(--card-bg);
-            padding: 30px;
             border-radius: var(--border-radius);
-            margin-bottom: 25px;
+            padding: 25px;
             box-shadow: var(--shadow-lg);
             backdrop-filter: blur(10px);
-            animation: slideDown 0.5s ease;
-        }
-        
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
         }
         
         .logo-section {
             display: flex;
             align-items: center;
             gap: 15px;
+            margin-bottom: 25px;
         }
         
         .logo-icon {
@@ -89,27 +91,41 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
         
         .logo-text h1 {
             color: var(--text-primary);
-            font-size: 32px;
+            font-size: 20px;
             font-weight: 800;
             letter-spacing: -0.5px;
         }
         
         .logo-text p {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
             margin-top: 2px;
         }
         
-        .header-badges {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        /* Status Section */
+        .status-section {
+            margin-bottom: 25px;
         }
         
-        .badge {
-            padding: 8px 16px;
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .status-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .badge-live {
+            background: linear-gradient(135deg, #3ddc84, #00c853);
+            color: white;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -118,25 +134,10 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             gap: 6px;
         }
         
-        .badge-primary {
-            background: var(--bg-gradient);
-            color: white;
-        }
-        
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .badge-info {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-        
         .status-dot {
             width: 8px;
             height: 8px;
-            background: #28a745;
+            background: white;
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
@@ -146,12 +147,35 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             50% { opacity: 0.7; transform: scale(1.2); }
         }
         
-        /* Controls Section */
-        .controls-section {
-            display: grid;
-            grid-template-columns: 1fr auto auto auto;
-            gap: 12px;
-            margin-bottom: 20px;
+        .status-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        }
+        
+        .status-info div {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* URL Input Section */
+        .url-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .url-input-wrapper {
@@ -160,10 +184,10 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
         
         .url-input {
             width: 100%;
-            padding: 14px 50px 14px 20px;
+            padding: 12px 45px 12px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 14px;
+            border-radius: 10px;
+            font-size: 13px;
             font-family: 'SF Mono', Monaco, 'Courier New', monospace;
             transition: var(--transition);
             background: white;
@@ -181,33 +205,36 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
-            font-size: 18px;
+            font-size: 16px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
         }
         
         .btn {
-            padding: 14px 24px;
+            flex: 1;
+            padding: 10px 16px;
             background: var(--bg-gradient);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             transition: var(--transition);
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 8px;
-            white-space: nowrap;
+            justify-content: center;
+            gap: 6px;
             box-shadow: var(--shadow-sm);
         }
         
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
         }
         
         .btn-secondary {
@@ -221,211 +248,308 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             color: white;
         }
         
-        /* Filters */
-        .filter-section {
-            padding-top: 20px;
-            border-top: 2px solid #f0f0f0;
-        }
-        
-        .filter-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            display: block;
-        }
-        
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 10px 18px;
-            background: #f8f9fa;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .filter-btn:hover {
-            background: #e9ecef;
-            border-color: var(--primary);
-        }
-        
-        .filter-btn.active {
-            background: var(--bg-gradient);
-            color: white;
-            border-color: transparent;
-            transform: scale(1.05);
-        }
-        
-        /* QR Section */
-        .qr-section {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--border-radius);
+        /* Device List Section */
+        .device-list-section {
             margin-bottom: 25px;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-            display: none;
-            animation: fadeIn 0.3s ease;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .qr-section h3 {
+        .device-list-title {
+            font-size: 16px;
+            font-weight: 700;
             color: var(--text-primary);
-            font-size: 20px;
             margin-bottom: 15px;
         }
         
-        .qr-code-container {
-            margin: 20px auto;
-            max-width: 300px;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: var(--shadow-sm);
+        /* Dropdown Styles */
+        .device-type-dropdown {
+            margin-bottom: 15px;
         }
         
-        .qr-code-container img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-        
-        /* Devices Grid */
-        .devices-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 30px;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .device-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow-md);
+        .dropdown-header {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
         }
         
-        .device-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
+        .dropdown-header:hover {
+            background: #e9ecef;
+        }
+        
+        .dropdown-header.open {
             background: var(--bg-gradient);
-            transform: scaleX(0);
+            color: white;
+        }
+        
+        .dropdown-icon {
             transition: transform 0.3s ease;
         }
         
-        .device-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
+        .dropdown-icon.open {
+            transform: rotate(180deg);
         }
         
-        .device-card:hover::before {
-            transform: scaleX(1);
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
         }
         
-        .device-header {
+        .dropdown-content.open {
+            max-height: 1000px;
+        }
+        
+        .device-list {
+            background: white;
+            border-radius: 10px;
+            margin-top: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .device-item {
+            padding: 12px 15px;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .device-item:hover {
+            background: #f8f9fa;
+            border-left-color: var(--primary);
+        }
+        
+        .device-item.selected {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left-color: var(--primary);
+        }
+        
+        .device-item:last-child {
+            border-bottom: none;
+        }
+        
+        .device-item-info {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            align-items: center;
         }
         
-        .device-info {
-            flex: 1;
+        .device-item-name {
+            font-weight: 600;
+            font-size: 14px;
         }
         
-        .device-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 6px;
+        .device-item-specs {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
         }
         
-        .device-specs {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-family: 'SF Mono', Monaco, monospace;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
+        .device-item.selected .device-item-specs {
+            color: var(--primary);
         }
         
-        .device-os-badge {
-            padding: 6px 14px;
-            border-radius: 12px;
+        .device-item-os {
             font-size: 11px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #e9ecef;
         }
         
-        .ios-badge {
-            background: linear-gradient(135deg, #007aff, #5ac8fa);
+        .device-item.selected .device-item-os {
+            background: var(--bg-gradient);
             color: white;
         }
         
-        .android-badge {
-            background: linear-gradient(135deg, #3ddc84, #00c853);
-            color: white;
-        }
-        
-        .desktop-badge {
-            background: linear-gradient(135deg, #9c27b0, #e91e63);
-            color: white;
-        }
-        
-        .device-actions {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-        
-        .action-btn {
-            padding: 6px 12px;
-            background: #f8f9fa;
-            border: none;
+        /* Framework Badge */
+        .framework-badge {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 8px 16px;
             border-radius: 8px;
-            cursor: pointer;
             font-size: 12px;
-            transition: var(--transition);
+            font-weight: 700;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-md);
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 8px;
         }
         
-        .action-btn:hover {
+        /* Main Content Area */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Preview Container */
+        .preview-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .preview-header {
+            margin-bottom: 25px;
+        }
+        
+        .preview-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .preview-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* Device Frame Container */
+        .device-frame-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            overflow: auto; /* Allow scrolling if needed */
+        }
+        
+        /* Zoom Controls */
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .zoom-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg-gradient);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .zoom-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .zoom-level {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .zoom-fit-btn {
+            padding: 6px 12px;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .zoom-fit-btn:hover {
             background: var(--primary);
             color: white;
         }
         
-        /* Device Frame - The Magic Part */
+        .placeholder-text {
+            text-align: center;
+            color: #666;
+        }
+        
+        .placeholder-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .placeholder-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        /* Device Frame */
         .device-frame {
             position: relative;
             margin: 0 auto;
             perspective: 1000px;
+            transition: transform 0.5s ease;
+        }
+        
+        .device-frame.active {
+            transform: scale(1);
+        }
+        
+        /* Screenshot Button */
+        .screenshot-btn {
+            position: absolute;
+            top: -50px;
+            right: 10px;
+            background: var(--bg-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+        
+        .screenshot-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .screenshot-btn:active {
+            transform: translateY(0);
         }
         
         .device-bezel {
@@ -437,17 +561,24 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
                 0 20px 60px rgba(0,0,0,0.4),
                 inset 0 0 0 1px rgba(255,255,255,0.1),
                 inset 0 1px 0 rgba(255,255,255,0.2);
-            transition: var(--transition);
-        }
-        
-        .device-card:hover .device-bezel {
-            transform: rotateY(5deg) rotateX(2deg);
         }
         
         /* iOS Device Frame */
         .ios-device .device-bezel {
             border-radius: 50px;
             background: linear-gradient(145deg, #1d1d1f, #000000);
+        }
+        
+        /* Android Device Frame */
+        .android-device .device-bezel {
+            border-radius: 40px;
+            background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+        }
+        
+        /* Desktop Device Frame */
+        .desktop-device .device-bezel {
+            border-radius: 12px;
+            background: linear-gradient(145deg, #e0e0e0, #c0c0c0);
         }
         
         /* Notch for iPhone */
@@ -517,7 +648,7 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             color: #000;
             z-index: 5;
             background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
+            
         }
         
         .status-time {
@@ -537,6 +668,10 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             border-radius: 36px;
             overflow: hidden;
             box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        
+        .desktop-device .device-screen-container {
+            border-radius: 8px;
         }
         
         .device-screen {
@@ -562,6 +697,10 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             z-index: 100;
             transition: opacity 0.3s ease;
             border-radius: 36px;
+        }
+        
+        .desktop-device .loading-overlay {
+            border-radius: 8px;
         }
         
         .loading-overlay.hidden {
@@ -590,41 +729,30 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             font-weight: 500;
         }
         
-        /* Performance Monitor */
-        .performance-panel {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            font-size: 12px;
-            z-index: 1000;
-            display: ${options.performance ? 'block' : 'none'};
-        }
-        
-        .perf-metric {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin: 5px 0;
-        }
-        
-        .perf-label {
-            color: var(--text-secondary);
-        }
-        
-        .perf-value {
-            font-weight: 700;
-            color: var(--primary);
+        /* Device Size Label */
+        .device-size-label {
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            text-align: center;
             font-family: 'SF Mono', Monaco, monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
         }
         
         /* Responsive Design */
         @media (max-width: 1200px) {
-            .devices-grid {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
             }
         }
         
@@ -633,67 +761,22 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
                 padding: 10px;
             }
             
-            .main-header {
+            .preview-container {
                 padding: 20px;
             }
             
-            .logo-text h1 {
-                font-size: 24px;
-            }
-            
-            .controls-section {
-                grid-template-columns: 1fr;
-            }
-            
-            .devices-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .device-card {
+            .device-frame-container {
                 padding: 20px;
             }
-        }
-        
-        /* Keyboard Shortcuts Help */
-        .shortcuts-help {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            font-size: 12px;
-            opacity: 0.9;
-            transition: var(--transition);
-        }
-        
-        .shortcuts-help:hover {
-            opacity: 1;
-        }
-        
-        .shortcut-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 5px 0;
-        }
-        
-        .shortcut-key {
-            background: #f8f9fa;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-family: 'SF Mono', Monaco, monospace;
-            border: 1px solid #dee2e6;
         }
     </style>
 </head>
 <body>
-    <!-- Main Header -->
-    <div class="main-header">
-        <div class="header-top">
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Logo -->
             <div class="logo-section">
                 <div class="logo-icon">📱</div>
                 <div class="logo-text">
@@ -701,264 +784,105 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
                     <p>Ultimate Device Emulator</p>
                 </div>
             </div>
-            <div class="header-badges">
-                <div class="badge badge-primary">
-                    ${options.framework.toUpperCase()}
+            
+            <!-- Status -->
+            <div class="status-section">
+                <div class="status-header">
+                    <div class="status-title">${options.framework.toUpperCase()}</div>
+                    <div class="badge-live">
+                        <span class="status-dot"></span>
+                        LIVE
+                    </div>
                 </div>
-                <div class="badge badge-success">
-                    <span class="status-dot"></span>
-                    Live
+                <div class="status-info">
+                    <div><span style="color: #667eea;">●</span> Server running</div>
+                    <div><span style="color: #667eea;">🔗</span> ${options.targetUrl}</div>
+                    <div><span style="color: #667eea;">🔄</span> Auto reload enabled</div>
                 </div>
-                ${options.performance ? '<div class="badge badge-info">⚡ Performance</div>' : ''}
+            </div>
+            
+            <!-- URL Input -->
+            <div class="url-section">
+                <div class="section-title">🔄 Preview URL</div>
+                <div class="url-input-wrapper">
+                    <input 
+                        type="text" 
+                        id="targetUrl" 
+                        class="url-input"
+                        value="${options.targetUrl}"
+                        placeholder="http://localhost:4200"
+                    >
+                    <span class="url-icon">🔗</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn" id="updateUrlBtn">
+                        Update
+                    </button>
+                    <button class="btn btn-secondary" id="reloadAllBtn">
+                        Reload All
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Device List -->
+            <div class="device-list-section">
+                <div class="device-list-title">📱 Devices</div>
+                <div id="deviceDropdowns"></div>
             </div>
         </div>
         
-        <div class="controls-section">
-            <div class="url-input-wrapper">
-                <input 
-                    type="text" 
-                    id="targetUrl" 
-                    class="url-input"
-                    value="${options.targetUrl}"
-                    placeholder="http://localhost:3000"
-                >
-                <span class="url-icon">🔗</span>
-            </div>
-            <button class="btn" onclick="updateUrl()">
-                🔄 Update
-            </button>
-            <button class="btn btn-secondary" onclick="reloadAll()">
-                ♻️ Reload All
-            </button>
-            <button class="btn btn-secondary" onclick="toggleQR()">
-                📱 QR Code
-            </button>
-        </div>
-        
-        <div class="filter-section">
-            <label class="filter-label">Filter Devices</label>
-            <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterDevices('all')">
-                    🌐 All Devices
-                </button>
-                <button class="filter-btn" onclick="filterDevices('mobile')">
-                    📱 Mobile
-                </button>
-                <button class="filter-btn" onclick="filterDevices('tablet')">
-                    📱 Tablet
-                </button>
-                <button class="filter-btn" onclick="filterDevices('desktop')">
-                    💻 Desktop
-                </button>
-                <button class="filter-btn" onclick="filterDevices('iOS')">
-                    🍎 iOS
-                </button>
-                <button class="filter-btn" onclick="filterDevices('Android')">
-                    🤖 Android
-                </button>
+        <!-- Main Content -->
+        <div class="content-area">
+            <!-- Preview Container -->
+            <div class="preview-container">
+                <div class="preview-header">
+                    <div class="preview-title">Preview</div>
+                </div>
+                
+                <!-- Device Frame Container -->
+                <div class="device-frame-container" id="deviceFrameContainer">
+                    <div class="placeholder-text" id="placeholderPreview">
+                        <div class="placeholder-icon">📱</div>
+                        <div class="placeholder-title">No Device Selected</div>
+                        <div class="preview-subtitle">Select a device from the list to preview it</div>
+                    </div>
+                    
+                    <!-- Device Frame will be inserted here -->
+                    <div id="devicePreview" style="display: none;"></div>
+                    
+                    <!-- Zoom Controls -->
+                    <div class="zoom-controls" id="zoomControls" style="display: none;">
+                        <button class="zoom-btn" id="zoomOut" title="Zoom Out">−</button>
+                        <span class="zoom-level" id="zoomLevel">100%</span>
+                        <button class="zoom-btn" id="zoomIn" title="Zoom In">+</button>
+                        <button class="zoom-fit-btn" id="zoomFit" title="Fit to Screen">Fit</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- QR Code Section -->
-    <div id="qrSection" class="qr-section">
-        <h3>📲 Test on Real Device</h3>
-        <p style="color: #666; margin-bottom: 10px;">
-            Scan this QR code with your phone to test on actual hardware
-        </p>
-        <div class="qr-code-container">
-            <div id="qrCode"></div>
-        </div>
-        <p style="color: #666; font-size: 13px;">
-            URL: <code style="background: #f8f9fa; padding: 4px 8px; border-radius: 4px;">${options.targetUrl}</code>
-        </p>
-    </div>
-    
-    <!-- Devices Grid -->
-    <div id="devicesGrid" class="devices-grid"></div>
-    
-    <!-- Performance Panel -->
-    <div class="performance-panel">
-        <div style="font-weight: 700; margin-bottom: 10px; color: var(--text-primary);">
-            ⚡ Performance
-        </div>
-        <div class="perf-metric">
-            <span class="perf-label">FPS:</span>
-            <span class="perf-value" id="fps">60</span>
-        </div>
-        <div class="perf-metric">
-            <span class="perf-label">Memory:</span>
-            <span class="perf-value" id="memory">--</span>
-        </div>
-        <div class="perf-metric">
-            <span class="perf-label">Load Time:</span>
-            <span class="perf-value" id="loadTime">--</span>
-        </div>
-    </div>
-    
-    <!-- Keyboard Shortcuts -->
-    <div class="shortcuts-help">
-        <div style="font-weight: 700; margin-bottom: 8px;">⌨️ Shortcuts</div>
-        <div class="shortcut-item">
-            <span class="shortcut-key">R</span>
-            <span>Reload All</span>
-        </div>
-        <div class="shortcut-item">
-            <span class="shortcut-key">Q</span>
-            <span>QR Code</span>
-        </div>
-        <div class="shortcut-item">
-            <span class="shortcut-key">S</span>
-            <span>Screenshots</span>
-        </div>
+    <!-- Framework Badge -->
+    <div class="framework-badge">
+        <span>⚡</span>
+        ${options.framework.toUpperCase()}
     </div>
     
     <script>
-        let devices = [];
-        let currentFilter = 'all';
+        // ✅ FIX 1: Define all functions FIRST before any initialization
+        
+        const devices = ${devicesJson};
+        let selectedDeviceId = null;
         let ws = null;
-        let performanceMetrics = { fps: 0, memory: 0, loadTime: 0 };
+        let currentZoom = 1.0; // Current zoom level (1.0 = 100%)
+        let openDropdowns = {
+            mobile: true,  // Open mobile by default
+            tablet: false
+        };
         
-        // Initialize
-        async function init() {
-            try {
-                const config = await fetch('/api/config').then(r => r.json());
-                devices = config.devices;
-                renderDevices();
-                setupWebSocket();
-                setupKeyboardShortcuts();
-                
-                if (config.performance) {
-                    startPerformanceMonitoring();
-                }
-            } catch (err) {
-                console.error('Initialization error:', err);
-                alert('Failed to connect to DeviceFrame Pro server. Make sure it\'s running.');
-            }
-        }
-        
-        // WebSocket Connection
-        function setupWebSocket() {
-            ws = new WebSocket(`ws://${location.host}`);
-            
-            ws.onopen = () => {
-                console.log('✓ Connected to DeviceFrame Pro');
-            };
-            
-            ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                handleWebSocketMessage(data);
-            };
-            
-            ws.onerror = (error) => {
-                console.error('WebSocket error:', error);
-            };
-            
-            ws.onclose = () => {
-                console.log('Disconnected. Reconnecting in 3s...');
-                setTimeout(setupWebSocket, 3000);
-            };
-        }
-        
-        function handleWebSocketMessage(data) {
-            switch (data.type) {
-                case 'reload-all':
-                    reloadAll();
-                    break;
-                case 'config-update':
-                    document.getElementById('targetUrl').value = data.config.targetUrl;
-                    reloadAll();
-                    break;
-            }
-        }
-        
-        // Render Devices
-        function renderDevices() {
-            const grid = document.getElementById('devicesGrid');
-            const filtered = currentFilter === 'all' 
-                ? devices 
-                : devices.filter(d => d.type === currentFilter || d.os === currentFilter);
-            
-            grid.innerHTML = filtered.map(device => {
-                const hasNotch = device.frameStyle.notch;
-                const hasHomeIndicator = device.frameStyle.homeIndicator;
-                const screenHeight = device.height - (hasHomeIndicator ? 30 : 0);
-                
-                return `
-                <div class="device-card ${device.os.toLowerCase()}-device" 
-                     data-type="${device.type}" 
-                     data-os="${device.os}">
-                    <div class="device-header">
-                        <div class="device-info">
-                            <div class="device-name">${device.name}</div>
-                            <div class="device-specs">
-                                <span>📐 ${device.width} × ${device.height}px</span>
-                                <span>🔍 ${device.pixelRatio}x pixel ratio</span>
-                                <span>📱 ${device.type}</span>
-                            </div>
-                        </div>
-                        <span class="device-os-badge ${device.os.toLowerCase()}-badge">
-                            ${device.os}
-                        </span>
-                    </div>
-                    
-                    <div class="device-actions">
-                        <button class="action-btn" onclick="screenshotDevice('${device.id}')">
-                            📸 Screenshot
-                        </button>
-                        <button class="action-btn" onclick="reloadDevice('${device.id}')">
-                            ♻️ Reload
-                        </button>
-                    </div>
-                    
-                    <div class="device-frame" id="frame-${device.id}">
-                        <div class="device-bezel" style="
-                            border-radius: ${device.frameStyle.borderRadius}px;
-                            background: ${device.frameStyle.frameColor};
-                            padding: ${device.frameStyle.frameWidth}px;
-                        ">
-                            ${hasNotch ? `
-                            <div class="device-notch">
-                                <div class="notch-speaker"></div>
-                                <div class="notch-camera"></div>
-                            </div>
-                            ` : ''}
-                            
-                            <div class="device-screen-container" style="
-                                border-radius: ${device.frameStyle.borderRadius - device.frameStyle.frameWidth}px;
-                                height: ${screenHeight}px;
-                            ">
-                                <div class="status-bar" style="height: ${device.frameStyle.statusBarHeight}px;">
-                                    <span class="status-time">${getCurrentTime()}</span>
-                                    <div class="status-icons">
-                                        ${device.os === 'iOS' ? '📶 📡 🔋' : '📶 📳 🔋'}
-                                    </div>
-                                </div>
-                                
-                                <iframe 
-                                    class="device-screen"
-                                    src="${document.getElementById('targetUrl').value}"
-                                    id="iframe-${device.id}"
-                                    style="height: ${screenHeight - device.frameStyle.statusBarHeight}px;"
-                                    onload="hideLoading('${device.id}')"
-                                ></iframe>
-                                
-                                <div class="loading-overlay" id="loading-${device.id}">
-                                    <div class="spinner"></div>
-                                    <div class="loading-text">Loading ${device.name}...</div>
-                                </div>
-                            </div>
-                            
-                            ${hasHomeIndicator ? '<div class="home-indicator"></div>' : ''}
-                        </div>
-                    </div>
-                </div>
-                `;
-            }).join('');
-            
-            // Update status bar time every second
-            setInterval(updateStatusBarTime, 1000);
-        }
+        // ============================================
+        // CORE FUNCTIONS - DEFINED FIRST
+        // ============================================
         
         function getCurrentTime() {
             const now = new Date();
@@ -967,6 +891,90 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
                 minute: '2-digit',
                 hour12: true 
             });
+        }
+        
+        function setZoom(zoom) {
+            currentZoom = Math.max(0.25, Math.min(2.0, zoom)); // Limit between 25% and 200%
+            
+            const deviceFrame = document.querySelector('.device-frame');
+            if (deviceFrame) {
+                deviceFrame.style.transform = 'scale(' + currentZoom + ')';
+            }
+            
+            // Update zoom level display
+            const zoomLevel = document.getElementById('zoomLevel');
+            if (zoomLevel) {
+                zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
+            }
+        }
+        
+        function zoomIn() {
+            setZoom(currentZoom + 0.1);
+        }
+        
+        function zoomOut() {
+            setZoom(currentZoom - 0.1);
+        }
+        
+        function zoomToFit() {
+            const device = devices.find(d => d.id === selectedDeviceId);
+            if (!device) return;
+            
+            const container = document.getElementById('deviceFrameContainer');
+            if (!container) return;
+            
+            // Get container dimensions
+            const containerWidth = container.clientWidth - 100; // padding
+            const containerHeight = container.clientHeight - 200; // padding + controls
+            
+            // Calculate device height (including frame)
+            const hasHomeIndicator = device.frameStyle?.homeIndicator || false;
+            const deviceHeight = device.height - (hasHomeIndicator ? 30 : 0);
+            const frameWidth = (device.frameStyle?.frameWidth || 14) * 2;
+            
+            const totalDeviceWidth = device.width + frameWidth;
+            const totalDeviceHeight = deviceHeight + frameWidth;
+            
+            // Calculate optimal zoom
+            const scaleX = containerWidth / totalDeviceWidth;
+            const scaleY = containerHeight / totalDeviceHeight;
+            const optimalZoom = Math.min(scaleX, scaleY, 1.0); // Never zoom beyond 100%
+            
+            setZoom(optimalZoom);
+        }
+        
+        async function takeScreenshot(deviceId) {
+            console.log('📸 Taking screenshot for device:', deviceId);
+            
+            try {
+                const response = await fetch('/api/screenshot/' + deviceId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fullPage: false, quality: 90 })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('✅ Screenshot captured!');
+                    
+                    // Auto-download the screenshot
+                    const link = document.createElement('a');
+                    link.href = result.url;
+                    link.download = result.filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    console.log('Screenshot saved:', result.filename);
+                } else {
+                    showNotification('❌ Screenshot failed: ' + result.error);
+                    console.error('Screenshot error:', result.error);
+                }
+            } catch (error) {
+                showNotification('❌ Screenshot failed');
+                console.error('Screenshot error:', error);
+            }
         }
         
         function updateStatusBarTime() {
@@ -983,35 +991,223 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             }
         }
         
-        // Filter Devices
-        function filterDevices(type) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            renderDevices();
+        function getTypeIcon(type) {
+            switch(type) {
+                case 'mobile': return '📱';
+                case 'tablet': return '📱';
+                case 'desktop': return '💻';
+                default: return '📱';
+            }
         }
         
-        // Update URL
+        function toggleDropdown(type) {
+            console.log('Toggling dropdown:', type);
+            openDropdowns[type] = !openDropdowns[type];
+            renderDeviceDropdowns();
+        }
+        
+        function selectDevice(deviceId, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            console.log('🎯 Selecting device:', deviceId);
+            selectedDeviceId = deviceId;
+            renderDeviceDropdowns();
+            renderDevicePreview(deviceId);
+            
+            // Hide placeholder, show preview
+            const placeholder = document.getElementById('placeholderPreview');
+            const preview = document.getElementById('devicePreview');
+            if (placeholder) placeholder.style.display = 'none';
+            if (preview) preview.style.display = 'block';
+        }
+        
+        function renderDeviceDropdowns() {
+            const container = document.getElementById('deviceDropdowns');
+            
+            if (!container) {
+                console.error('❌ Container #deviceDropdowns not found!');
+                return;
+            }
+            
+            // Group devices by type
+            const devicesByType = {
+                mobile: devices.filter(d => d.type === 'mobile'),
+                tablet: devices.filter(d => d.type === 'tablet'),
+                desktop: devices.filter(d => d.type === 'desktop')
+            };
+            
+            console.log('Device grouping:', {
+                mobile: devicesByType.mobile.length,
+                tablet: devicesByType.tablet.length,
+                desktop: devicesByType.desktop.length
+            });
+            
+            // Create dropdowns for each type
+            const dropdownsHTML = Object.entries(devicesByType).map(([type, typeDevices]) => {
+                if (typeDevices.length === 0) return '';
+                
+                const isOpen = openDropdowns[type];
+                const icon = getTypeIcon(type);
+                const typeName = type.charAt(0).toUpperCase() + type.slice(1);
+                const count = typeDevices.length;
+                
+                const devicesHTML = typeDevices.map(device => {
+                    const isSelected = device.id === selectedDeviceId;
+                    const osIcon = device.os === 'iOS' ? '🍎' : device.os === 'Android' ? '🤖' : '💻';
+                    
+                    return '<div class="device-item ' + (isSelected ? 'selected' : '') + '" data-device-id="' + device.id + '">' +
+                        '<div class="device-item-info">' +
+                            '<div>' +
+                                '<div class="device-item-name">' + osIcon + ' ' + device.name + '</div>' +
+                                '<div class="device-item-specs">' + device.width + ' × ' + device.height + 'px • ' + device.os + '</div>' +
+                            '</div>' +
+                            '<span class="device-item-os">' + device.os + '</span>' +
+                        '</div>' +
+                    '</div>';
+                }).join('');
+                
+                return '<div class="device-type-dropdown">' +
+                    '<div class="dropdown-header ' + (isOpen ? 'open' : '') + '" data-dropdown-type="' + type + '">' +
+                        '<div>' + icon + ' ' + typeName + ' (' + count + ')</div>' +
+                        '<div class="dropdown-icon ' + (isOpen ? 'open' : '') + '">▼</div>' +
+                    '</div>' +
+                    '<div class="dropdown-content ' + (isOpen ? 'open' : '') + '">' +
+                        '<div class="device-list">' + devicesHTML + '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+            
+            container.innerHTML = dropdownsHTML;
+            
+            // Setup event delegation for clicks
+            container.querySelectorAll('.dropdown-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    const type = this.getAttribute('data-dropdown-type');
+                    toggleDropdown(type);
+                });
+            });
+            
+            container.querySelectorAll('.device-item').forEach(item => {
+                item.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    const deviceId = this.getAttribute('data-device-id');
+                    selectDevice(deviceId);
+                });
+            });
+            
+            console.log('✅ Device dropdowns rendered successfully with event listeners');
+        }
+        
+        function renderDevicePreview(deviceId) {
+            const device = devices.find(d => d.id === deviceId);
+            if (!device) {
+                console.error('❌ Device not found:', deviceId);
+                return;
+            }
+            
+            console.log('🖼️ Rendering preview for:', device.name);
+            
+            const hasNotch = device.frameStyle?.notch || false;
+            const hasHomeIndicator = device.frameStyle?.homeIndicator || false;
+            const screenHeight = device.height - (hasHomeIndicator ? 30 : 0);
+            const statusBarHeight = device.frameStyle?.statusBarHeight || 44;
+            const notchHTML = hasNotch ? '<div class="device-notch"><div class="notch-speaker"></div><div class="notch-camera"></div></div>' : '';
+            const homeIndicatorHTML = hasHomeIndicator ? '<div class="home-indicator"></div>' : '';
+            const statusIcons = device.os === 'iOS' ? '📶 📡 🔋' : '📶 📳 🔋';
+            const url = document.getElementById('targetUrl').value;
+            
+            // No scaling here - we'll use CSS transform with zoom controls
+            const frameWidth = device.frameStyle?.frameWidth || 14;
+                        
+            const frameHTML = '<div class="device-frame ' + device.os.toLowerCase() + '-device ' + device.type + '-device active">' +
+
+                '<div class="device-bezel" style="border-radius: ' + (device.frameStyle?.borderRadius || 40) + 'px; background: ' + (device.frameStyle?.frameColor || 'linear-gradient(145deg, #2c2c2c, #1a1a1a)') + '; padding: ' + frameWidth + 'px; width: ' + device.width + 'px; height: ' + (screenHeight + frameWidth * 2) + 'px;">' +
+                    notchHTML +
+                    '<div class="device-screen-container" style="border-radius: ' + ((device.frameStyle?.borderRadius || 40) - frameWidth) + 'px; height: ' + screenHeight + 'px;">' +
+                        '<div class="status-bar" style="height: ' + statusBarHeight + 'px; display: ' + (statusBarHeight > 0 ? 'flex' : 'none') + ';">' +
+                            '<span class="status-time">' + getCurrentTime() + '</span>' +
+                            '<div class="status-icons">' + statusIcons + '</div>' +
+                        '</div>' +
+                        '<iframe class="device-screen" src="' + url + '" id="iframe-' + device.id + '" data-device-id="' + device.id + '" style="height: ' + (screenHeight - statusBarHeight) + 'px;"></iframe>' +
+                        '<div class="loading-overlay" id="loading-' + device.id + '"><div class="spinner"></div><div class="loading-text">Loading ' + device.name + '...</div></div>' +
+                    '</div>' +
+                    homeIndicatorHTML +
+                '</div>' +
+                '<div class="device-size-label">' + device.name + ' • ' + device.width + ' × ' + device.height + 'px • ' + device.os + '</div>' +
+            '</div>';
+            
+            document.getElementById('devicePreview').innerHTML = frameHTML;
+            
+            // Setup iframe load listener
+            const iframe = document.getElementById('iframe-' + device.id);
+            if (iframe) {
+                iframe.addEventListener('load', function() {
+                    hideLoading(device.id);
+                });
+            }
+            
+            // Setup screenshot button listener
+            const screenshotBtn = document.querySelector('.screenshot-btn[data-device-id="' + device.id + '"]');
+            if (screenshotBtn) {
+                screenshotBtn.addEventListener('click', function() {
+                    takeScreenshot(device.id);
+                });
+            }
+            
+            // Show zoom controls
+            const zoomControls = document.getElementById('zoomControls');
+            if (zoomControls) {
+                zoomControls.style.display = 'flex';
+            }
+            
+            // Auto-fit to screen
+            setTimeout(() => {
+                zoomToFit();
+            }, 100);
+            
+            // Update status bar time every second
+            setInterval(updateStatusBarTime, 1000);
+        }
+        
         async function updateUrl() {
             const url = document.getElementById('targetUrl').value;
+            console.log('🔄 Updating URL to:', url);
+            
             try {
-                await fetch('/api/config', {
+                // Try to update via API if available
+                const response = await fetch('/api/config', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ targetUrl: url })
                 });
-                reloadAll();
+                
+                if (response.ok) {
+                    if (selectedDeviceId) {
+                        renderDevicePreview(selectedDeviceId);
+                    }
+                }
             } catch (err) {
-                console.error('Failed to update URL:', err);
-                alert('Failed to update URL');
+                // If API not available, just update locally
+                console.log('API not available, updating locally');
+                if (selectedDeviceId) {
+                    renderDevicePreview(selectedDeviceId);
+                }
             }
         }
         
-        // Reload Functions
         function reloadAll() {
-            devices.forEach(device => reloadDevice(device.id));
+            console.log('♻️ Reloading all devices');
+            if (selectedDeviceId) {
+                reloadDevice(selectedDeviceId);
+            }
+            devices.forEach(device => {
+                const iframe = document.getElementById('iframe-' + device.id);
+                if (iframe) {
+                    iframe.src = iframe.src;
+                }
+            });
         }
         
         function reloadDevice(deviceId) {
@@ -1024,53 +1220,6 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             }
         }
         
-        // Rotate Device
-        function rotateDevice(deviceId) {
-            const frame = document.getElementById('frame-' + deviceId);
-            const currentRotation = frame.style.transform || 'rotate(0deg)';
-            const isRotated = currentRotation.includes('90deg');
-            
-            frame.style.transform = isRotated ? 'rotate(0deg)' : 'rotate(90deg)';
-            frame.style.transition = 'transform 0.5s ease';
-        }
-        
-        // Screenshot Device
-        async function screenshotDevice(deviceId) {
-            try {
-                const response = await fetch(`/api/screenshot/${deviceId}`, {
-                    method: 'POST'
-                });
-                const data = await response.json();
-                
-                if (data.success) {
-                    showNotification(`📸 Screenshot saved: ${data.filename}`);
-                }
-            } catch (err) {
-                console.error('Screenshot failed:', err);
-                showNotification('❌ Screenshot failed', 'error');
-            }
-        }
-        
-        // QR Code
-        async function toggleQR() {
-            const section = document.getElementById('qrSection');
-            const qrCode = document.getElementById('qrCode');
-            
-            if (section.style.display === 'none' || !section.style.display) {
-                try {
-                    const response = await fetch('/api/qrcode');
-                    const data = await response.json();
-                    qrCode.innerHTML = `<img src="${data.qrCode}" alt="QR Code" style="width: 100%; border-radius: 8px;">`;
-                    section.style.display = 'block';
-                } catch (err) {
-                    console.error('QR code generation failed:', err);
-                }
-            } else {
-                section.style.display = 'none';
-            }
-        }
-        
-        // Keyboard Shortcuts
         function setupKeyboardShortcuts() {
             document.addEventListener('keydown', (e) => {
                 // Ignore if typing in input
@@ -1078,98 +1227,166 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
                 
                 switch(e.key.toLowerCase()) {
                     case 'r':
-                        reloadAll();
-                        showNotification('♻️ Reloading all devices...');
+                        if (e.ctrlKey || e.metaKey) {
+                            reloadAll();
+                            showNotification('♻️ Reloading...');
+                        }
                         break;
-                    case 'q':
-                        toggleQR();
+                    case 'arrowdown':
+                        if (selectedDeviceId) {
+                            const currentIndex = devices.findIndex(d => d.id === selectedDeviceId);
+                            const nextIndex = (currentIndex + 1) % devices.length;
+                            selectDevice(devices[nextIndex].id);
+                        }
                         break;
-                    case 's':
-                        screenshotAll();
+                    case 'arrowup':
+                        if (selectedDeviceId) {
+                            const currentIndex = devices.findIndex(d => d.id === selectedDeviceId);
+                            const prevIndex = (currentIndex - 1 + devices.length) % devices.length;
+                            selectDevice(devices[prevIndex].id);
+                        }
                         break;
                 }
             });
         }
         
-        async function screenshotAll() {
-            showNotification('📸 Taking screenshots of all devices...');
-            for (const device of devices) {
-                await screenshotDevice(device.id);
-                await new Promise(resolve => setTimeout(resolve, 200));
-            }
-            showNotification('✅ All screenshots captured!');
-        }
-        
-        // Performance Monitoring
-        function startPerformanceMonitoring() {
-            let frameCount = 0;
-            let lastTime = performance.now();
-            
-            function measureFPS() {
-                frameCount++;
-                const currentTime = performance.now();
-                
-                if (currentTime >= lastTime + 1000) {
-                    const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
-                    document.getElementById('fps').textContent = fps;
-                    frameCount = 0;
-                    lastTime = currentTime;
-                }
-                
-                requestAnimationFrame(measureFPS);
-            }
-            
-            measureFPS();
-            
-            // Memory usage
-            setInterval(() => {
-                if (performance.memory) {
-                    const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(1);
-                    document.getElementById('memory').textContent = `${used} MB`;
-                }
-            }, 2000);
-            
-            // Measure load time for each iframe
-            devices.forEach(device => {
-                const iframe = document.getElementById('iframe-' + device.id);
-                if (iframe) {
-                    const startTime = performance.now();
-                    iframe.addEventListener('load', () => {
-                        const loadTime = (performance.now() - startTime).toFixed(0);
-                        console.log(`${device.name} loaded in ${loadTime}ms`);
-                    });
-                }
-            });
-        }
-        
-        // Notification System
-        function showNotification(message, type = 'info') {
+        function showNotification(message) {
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: ${type === 'error' ? '#dc3545' : '#667eea'};
-                color: white;
-                padding: 15px 25px;
-                border-radius: 12px;
-                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-                z-index: 10000;
-                font-weight: 600;
-                animation: slideDown 0.3s ease;
-            `;
+            notification.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #667eea; color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10000; font-weight: 600; animation: slideIn 0.3s ease;';
             notification.textContent = message;
             document.body.appendChild(notification);
             
             setTimeout(() => {
                 notification.style.animation = 'fadeOut 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
-            }, 3000);
+            }, 2000);
         }
         
-        // Initialize on load
-        init();
+        function setupWebSocket() {
+            try {
+                ws = new WebSocket('ws://' + location.host);
+                
+                ws.onopen = () => {
+                    console.log('✓ Connected to DeviceFrame Pro');
+                };
+                
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        handleWebSocketMessage(data);
+                    } catch (e) {
+                        console.error('WebSocket message error:', e);
+                    }
+                };
+                
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+                
+                ws.onclose = () => {
+                    console.log('Disconnected. Reconnecting in 3s...');
+                    setTimeout(setupWebSocket, 3000);
+                };
+            } catch (error) {
+                console.log('WebSocket not available, continuing without real-time updates');
+            }
+        }
+        
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'reload-all':
+                    reloadAll();
+                    break;
+                case 'config-update':
+                    if (data.config && data.config.targetUrl) {
+                        document.getElementById('targetUrl').value = data.config.targetUrl;
+                        if (selectedDeviceId) {
+                            renderDevicePreview(selectedDeviceId);
+                        }
+                    }
+                    break;
+            }
+        }
+        
+        function init() {
+            console.log('🚀 Initializing DeviceFrame Pro...');
+            console.log('📱 Total devices loaded:', devices.length);
+            
+            // Setup button event listeners
+            const updateBtn = document.getElementById('updateUrlBtn');
+            const reloadBtn = document.getElementById('reloadAllBtn');
+            const zoomInBtn = document.getElementById('zoomIn');
+            const zoomOutBtn = document.getElementById('zoomOut');
+            const zoomFitBtn = document.getElementById('zoomFit');
+            
+            if (updateBtn) {
+                updateBtn.addEventListener('click', updateUrl);
+                console.log('✓ Update button listener attached');
+            }
+            
+            if (reloadBtn) {
+                reloadBtn.addEventListener('click', reloadAll);
+                console.log('✓ Reload button listener attached');
+            }
+            
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', zoomIn);
+                console.log('✓ Zoom In button listener attached');
+            }
+            
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', zoomOut);
+                console.log('✓ Zoom Out button listener attached');
+            }
+            
+            if (zoomFitBtn) {
+                zoomFitBtn.addEventListener('click', zoomToFit);
+                console.log('✓ Zoom Fit button listener attached');
+            }
+            
+            // Render with mobile already open
+            renderDeviceDropdowns();
+            setupWebSocket();
+            setupKeyboardShortcuts();
+            
+            console.log('✅ Initialization complete');
+            
+            // Debug: Check if dropdowns were rendered
+            setTimeout(() => {
+                const container = document.getElementById('deviceDropdowns');
+                console.log('Device container innerHTML length:', container ? container.innerHTML.length : 'NOT FOUND');
+                console.log('Device container content:', container ? container.innerHTML.substring(0, 200) : 'NOT FOUND');
+            }, 100);
+        }
+        
+        // ============================================
+        // EXPOSE FUNCTIONS TO WINDOW - AFTER DEFINITION
+        // ============================================
+        
+        window.selectDevice = selectDevice;
+        window.toggleDropdown = toggleDropdown;
+        window.renderDeviceDropdowns = renderDeviceDropdowns;
+        window.reloadAll = reloadAll;
+        window.reloadDevice = reloadDevice;
+        window.updateUrl = updateUrl;
+        window.hideLoading = hideLoading;
+        window.getCurrentTime = getCurrentTime;
+        window.takeScreenshot = takeScreenshot;
+        window.setZoom = setZoom;
+        window.zoomIn = zoomIn;
+        window.zoomOut = zoomOut;
+        window.zoomToFit = zoomToFit;
+        
+        // ============================================
+        // INITIALIZE WHEN DOM IS READY
+        // ============================================
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            // DOM already loaded, init immediately
+            init();
+        }
     </script>
 </body>
 </html>`;

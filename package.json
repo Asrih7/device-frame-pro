@@ -1,6 +1,6 @@
 {
-  "name": "device-emulator-tool",
-  "version": "2.0.0",
+  "name": "device-frame-pro",
+  "version": "1.0.0",
   "description": "🚀 Ultimate realistic device emulator with native-like frames for React, Vue, Angular, Next.js and all web frameworks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "mkdir -p dist/assets && cp -r assets/* dist/assets/",
+    "copy-assets": "cpx \"assets/**/*\" dist/assets",
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build",
     "test": "echo \"Tests coming soon\" && exit 0"
@@ -30,36 +30,43 @@
     "web-development",
     "developer-tools",
     "realistic-frames",
-    "mobile-frames"
+    "mobile-frames",
+    "screenshot",
+    "device-screenshot",
+    "puppeteer",
+    "browser-automation"
   ],
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Asrih7/device-emulator-tool"
+    "url": "https://github.com/Asrih7/device-frame-pro"
   },
-  "bugs": {
-    "url": "https://github.com/Asrih7/device-emulator-tool/issues"
-  },
-  "homepage": "https://github.com/Asrih7/device-emulator-tool#readme",
+ 
+  "homepage": "https://github.com/yourusername/deviceframe-pro#readme",
   "dependencies": {
-    "express": "^4.18.2",
-    "ws": "^8.14.2",
-    "commander": "^11.1.0",
-    "open": "^9.1.0",
     "chalk": "^4.1.2",
-    "detect-port": "^1.5.1",
-    "qrcode": "^1.5.3",
+    "commander": "^11.1.0",
     "compression": "^1.7.4",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "detect-port": "^1.5.1",
+    "express": "^4.18.2",
+    "open": "^9.1.0",
+    "puppeteer": "^24.36.1",
+    "qrcode": "^1.5.3",
+    "ws": "^8.14.2"
   },
   "devDependencies": {
-    "@types/express": "^4.17.20",
-    "@types/ws": "^8.5.8",
-    "@types/node": "^20.8.10",
-    "@types/qrcode": "^1.5.5",
     "@types/compression": "^1.7.5",
     "@types/cors": "^2.8.17",
+    "@types/detect-port": "^1.3.5",
+    "@types/express": "^4.17.20",
+    "@types/figlet": "^1.7.0",
+    "@types/node": "^20.8.10",
+    "@types/qrcode": "^1.5.5",
+    "@types/ws": "^8.5.8",
+    "cpx": "^1.2.1",
+    "figlet": "^1.10.0",
     "typescript": "^5.2.2"
   },
   "engines": {

@@ -5,30 +5,27 @@ The ultimate realistic device emulator with native-like frames for all frontend 
 ## ✨ Features
 
 - 📱 **12+ Realistic Device Frames** with accurate bezels, notches, and home indicators
-- 🎨 **Native-Like UI** - iOS, Android, Desktop with status bars
+- 🎨 **Native-Like UI** - iOS, Android, tablet
 - ⚡ **High Performance** - Optimized rendering with GPU acceleration
 - 🔄 **Live Reload** - Auto-sync across all devices
-- 📸 **Screenshots** - Capture each device individually
 - 🌐 **Universal Support** - React, Vue, Angular, Next.js, Nuxt, Svelte, Ionic
-- 📲 **QR Code** - Test on real devices instantly
-- ⌨️ **Keyboard Shortcuts** - Fast workflow
 - 📊 **Performance Monitoring** - FPS, Memory, Load times
 
 ## 📦 Installation
 
 ### Global (Recommended)
 ```bash
-npm install -g device-emulator-tool
+npm install -g deviceframe-pro
 ```
 
 ### Project
 ```bash
-npm install --save-dev device-emulator-tool
+npm install --save-dev deviceframe-pro
 ```
 
 ### NPX (No installation)
 ```bash
-npx device-emulator-tool
+npx deviceframe-pro
 ```
 
 ## 🚀 Quick Start
