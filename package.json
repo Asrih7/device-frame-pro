@@ -1,6 +1,6 @@
 {
   "name": "device-frame-pro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "🚀 Ultimate realistic device emulator with native-like frames for React, Vue, Angular, Next.js and all web frameworks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -40,9 +40,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Asrih7/device-frame-pro"
+    "url": "git+https://github.com/Asrih7/device-frame-pro.git"
   },
- 
   "homepage": "https://github.com/Asrih7/device-frame-pro/blob/main/README.md",
   "dependencies": {
     "chalk": "^4.1.2",

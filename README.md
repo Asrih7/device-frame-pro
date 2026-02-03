@@ -25,7 +25,7 @@ npm install --save-dev deviceframe-pro
 
 ### NPX (No installation)
 ```bash
-npx deviceframe-pro
+npx device-frame-pro
 ```
 
 ## 🚀 Quick Start
