@@ -334,6 +334,53 @@ export class DeviceFrameServer {
         browser: this.browser ? 'connected' : 'disconnected'
       });
     });
+
+    // Proxy middleware: Forward requests to target dev server
+    // This ensures that iframe requests for CSS, JS, manifest.json, etc. reach the React dev server
+    this.app.use(async (req, res) => {
+      // Skip API routes and static files already handled
+      if (req.path.startsWith('/api') || req.path.startsWith('/screenshots') || req.path.startsWith('/health')) {
+        return res.status(404).json({ error: 'Not found' });
+      }
+
+      try {
+        const targetUrl = this.options.targetUrl.endsWith('/') 
+          ? this.options.targetUrl.slice(0, -1) 
+          : this.options.targetUrl;
+        
+        const forwardUrl = `${targetUrl}${req.path}${req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''}`;
+        
+        console.log(`📡 Proxying: ${req.path} → ${forwardUrl}`);
+        
+        const https = require('https');
+        const http = require('http');
+        const protocol = forwardUrl.startsWith('https') ? https : http;
+        
+        protocol.get(forwardUrl, { 
+          headers: req.headers,
+          timeout: 5000 
+        }, (targetRes: any) => {
+          res.status(targetRes.statusCode || 200);
+          Object.keys(targetRes.headers).forEach(key => {
+            res.setHeader(key, targetRes.headers[key]);
+          });
+          targetRes.pipe(res);
+        }).on('error', (err: any) => {
+          console.error(`❌ Proxy error for ${forwardUrl}:`, err.message);
+          res.status(502).json({ 
+            error: 'Bad Gateway',
+            message: `Failed to proxy to ${this.options.targetUrl}: ${err.message}`,
+            hint: `Make sure your dev server is running on ${this.options.targetUrl}`
+          });
+        });
+      } catch (err: any) {
+        console.error('Proxy middleware error:', err);
+        res.status(500).json({ 
+          error: 'Internal Server Error',
+          message: err.message 
+        });
+      }
+    });
   }
 
   /**

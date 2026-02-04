@@ -1115,7 +1115,9 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             const notchHTML = hasNotch ? '<div class="device-notch"><div class="notch-speaker"></div><div class="notch-camera"></div></div>' : '';
             const homeIndicatorHTML = hasHomeIndicator ? '<div class="home-indicator"></div>' : '';
             const statusIcons = device.os === 'iOS' ? '📶 📡 🔋' : '📶 📳 🔋';
-            const url = document.getElementById('targetUrl').value;
+            // ✅ FIX: Load from current host (DeviceFrame proxy) instead of target URL directly
+            // This allows the proxy to handle React's PUBLIC_URL and asset serving correctly
+            const url = window.location.origin;
             
             // No scaling here - we'll use CSS transform with zoom controls
             const frameWidth = device.frameStyle?.frameWidth || 14;
