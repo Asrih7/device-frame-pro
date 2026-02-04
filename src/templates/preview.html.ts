@@ -62,7 +62,37 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             position: sticky;
             top: 20px;
             max-height: calc(100vh - 40px);
-            overflow-y: auto;
+            overflow: hidden; /* Changed from overflow-y: auto */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Device List Section - THIS IS THE KEY FIX */
+        .device-list-section {
+            margin-bottom: 25px;
+            flex: 1; /* Allow it to grow */
+            overflow-y: auto; /* Make THIS section scrollable */
+            overflow-x: hidden;
+            max-height: calc(100vh - 500px); /* Leave room for header, status, and URL sections */
+        }
+        
+        /* Custom Scrollbar for device list */
+        .device-list-section::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .device-list-section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .device-list-section::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        .device-list-section::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
         }
         
         .logo-section {
@@ -248,10 +278,6 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             color: white;
         }
         
-        /* Device List Section */
-        .device-list-section {
-            margin-bottom: 25px;
-        }
         
         .device-list-title {
             font-size: 16px;
@@ -299,11 +325,11 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
         .dropdown-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: max-height 0.5s ease;
         }
         
         .dropdown-content.open {
-            max-height: 2000px; /* ✅ Increased from 1000px to 2000px to show ALL devices */
+            max-height: 5000px; /* ✅ Increased to 5000px to show ALL devices without cutting off */
         }
         
         .device-list {
@@ -648,7 +674,7 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             color: #000;
             z-index: 5;
             background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
+            
         }
         
         .status-time {
@@ -837,7 +863,6 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             <div class="preview-container">
                 <div class="preview-header">
                     <div class="preview-title">Preview</div>
-                    <div class="preview-subtitle">Live device emulation with real-time updates</div>
                 </div>
                 
                 <!-- Device Frame Container -->
@@ -1123,10 +1148,8 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             const frameWidth = device.frameStyle?.frameWidth || 14;
             
             // Add screenshot button HTML
-            const screenshotBtnHTML = '<button class="screenshot-btn" data-device-id="' + device.id + '" title="Take Screenshot">📸</button>';
             
             const frameHTML = '<div class="device-frame ' + device.os.toLowerCase() + '-device ' + device.type + '-device active">' +
-                screenshotBtnHTML +
                 '<div class="device-bezel" style="border-radius: ' + (device.frameStyle?.borderRadius || 40) + 'px; background: ' + (device.frameStyle?.frameColor || 'linear-gradient(145deg, #2c2c2c, #1a1a1a)') + '; padding: ' + frameWidth + 'px; width: ' + device.width + 'px; height: ' + (screenHeight + frameWidth * 2) + 'px;">' +
                     notchHTML +
                     '<div class="device-screen-container" style="border-radius: ' + ((device.frameStyle?.borderRadius || 40) - frameWidth) + 'px; height: ' + screenHeight + 'px;">' +
