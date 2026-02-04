@@ -634,7 +634,6 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
         
         /* Status Bar */
         .status-bar {
-            position: absolute;
             top: 0;
             left: 0;
             right: 0;
