@@ -1,6 +1,6 @@
 {
   "name": "device-frame-pro",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "🚀 Ultimate realistic device emulator with native-like frames for React, Vue, Angular, Next.js and all web frameworks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -67,7 +67,6 @@
     "@types/qrcode": "^1.5.5",
     "@types/ws": "^8.5.8",
     "cpx": "^1.2.1",
-
     "typescript": "^5.2.2"
   },
   "engines": {

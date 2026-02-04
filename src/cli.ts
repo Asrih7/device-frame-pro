@@ -3,19 +3,33 @@ import { Command } from 'commander';
 import { DeviceFrameServer } from './server';
 import { detectFramework, detectDevServer } from './detector';
 import chalk from 'chalk';
-import figlet from 'figlet';
+
+let figlet: any;
+try {
+  figlet = require('figlet');
+} catch (e) {
+  figlet = null;
+}
 
 const program = new Command();
 
 async function displayBanner() {
-  console.log(
-    chalk.cyan(
-      figlet.textSync('DeviceFrame Pro', {
-        font: 'Standard',
-        horizontalLayout: 'default'
-      })
-    )
-  );
+  try {
+    if (figlet) {
+      console.log(
+        chalk.cyan(
+          figlet.textSync('DeviceFrame Pro', {
+            font: 'Standard',
+            horizontalLayout: 'default'
+          })
+        )
+      );
+    } else {
+      console.log(chalk.cyan.bold('🚀 DeviceFrame Pro'));
+    }
+  } catch (e) {
+    console.log(chalk.cyan.bold('🚀 DeviceFrame Pro'));
+  }
   console.log(chalk.gray('  Ultimate Device Emulator for Modern Developers\n'));
 }
 
