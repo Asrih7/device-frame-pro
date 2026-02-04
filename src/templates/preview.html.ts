@@ -303,7 +303,7 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
         }
         
         .dropdown-content.open {
-            max-height: 1000px;
+            max-height: 2000px; /* ✅ Increased from 1000px to 2000px to show ALL devices */
         }
         
         .device-list {
@@ -634,6 +634,7 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
         
         /* Status Bar */
         .status-bar {
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
@@ -647,7 +648,7 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             color: #000;
             z-index: 5;
             background: rgba(255,255,255,0.95);
-            
+            backdrop-filter: blur(10px);
         }
         
         .status-time {
@@ -836,6 +837,7 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             <div class="preview-container">
                 <div class="preview-header">
                     <div class="preview-title">Preview</div>
+                    <div class="preview-subtitle">Live device emulation with real-time updates</div>
                 </div>
                 
                 <!-- Device Frame Container -->
@@ -875,8 +877,8 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
         let ws = null;
         let currentZoom = 1.0; // Current zoom level (1.0 = 100%)
         let openDropdowns = {
-            mobile: true,  // Open mobile by default
-            tablet: false
+            mobile: true,  // ✅ Open by default
+            tablet: true   // ✅ Open by default - NOW YOU SEE ALL DEVICES!
         };
         
         // ============================================
@@ -1115,15 +1117,16 @@ export function getPreviewHTML(options: Required<DeviceFrameOptions>): string {
             const notchHTML = hasNotch ? '<div class="device-notch"><div class="notch-speaker"></div><div class="notch-camera"></div></div>' : '';
             const homeIndicatorHTML = hasHomeIndicator ? '<div class="home-indicator"></div>' : '';
             const statusIcons = device.os === 'iOS' ? '📶 📡 🔋' : '📶 📳 🔋';
-            // ✅ FIX: Load from current host (DeviceFrame proxy) instead of target URL directly
-            // This allows the proxy to handle React's PUBLIC_URL and asset serving correctly
-            const url = window.location.origin;
+            const url = document.getElementById('targetUrl').value;
             
             // No scaling here - we'll use CSS transform with zoom controls
             const frameWidth = device.frameStyle?.frameWidth || 14;
-                        
+            
+            // Add screenshot button HTML
+            const screenshotBtnHTML = '<button class="screenshot-btn" data-device-id="' + device.id + '" title="Take Screenshot">📸</button>';
+            
             const frameHTML = '<div class="device-frame ' + device.os.toLowerCase() + '-device ' + device.type + '-device active">' +
-
+                screenshotBtnHTML +
                 '<div class="device-bezel" style="border-radius: ' + (device.frameStyle?.borderRadius || 40) + 'px; background: ' + (device.frameStyle?.frameColor || 'linear-gradient(145deg, #2c2c2c, #1a1a1a)') + '; padding: ' + frameWidth + 'px; width: ' + device.width + 'px; height: ' + (screenHeight + frameWidth * 2) + 'px;">' +
                     notchHTML +
                     '<div class="device-screen-container" style="border-radius: ' + ((device.frameStyle?.borderRadius || 40) - frameWidth) + 'px; height: ' + screenHeight + 'px;">' +

@@ -4,7 +4,7 @@ The ultimate realistic device emulator with native-like frames for all frontend 
 
 ## ✨ Features
 
-- 📱 **60+ Realistic Device Frames** - iOS, Android, Tablets with accurate bezels, notches, and home indicators
+- 📱 **30+ Realistic Device Frames** - iOS, Android, Tablets with accurate bezels, notches, and home indicators
 - 🎨 **Native-Like UI** - Authentic iOS and Android styling
 - ⚡ **High Performance** - Optimized rendering with GPU acceleration
 - 🔄 **Live Reload** - Auto-sync across all devices
@@ -16,17 +16,17 @@ The ultimate realistic device emulator with native-like frames for all frontend 
 
 ### Global (Recommended)
 ```bash
-npm install -g deviceframe-pro
+npm install -g device-frame-pro
 ```
 
 ### Project
 ```bash
-npm install --save-dev deviceframe-pro
+npm install --save-dev device-frame-pro
 ```
 
 ### NPX (No installation)
 ```bash
-npx deviceframe-pro
+npx device-frame-pro
 ```
 
 ## 🚀 Quick Start
@@ -36,7 +36,7 @@ npx deviceframe-pro
 npm start
 
 # In another terminal
-npx deviceframe-pro
+npx device-frame-pro
 ```
 
 ## 📱 Supported Devices
@@ -120,22 +120,22 @@ Options:
 
 ### Basic Usage
 ```bash
-npx deviceframe-pro
+npx device-frame-pro
 ```
 
 ### With Performance Monitoring
 ```bash
-npx deviceframe-pro --perf --qr
+npx device-frame-pro --perf --qr
 ```
 
 ### Specific Devices Only
 ```bash
-npx deviceframe-pro --devices iphone-15-pro-max,ipad-pro-12,galaxy-s24-ultra
+npx device-frame-pro --devices iphone-15-pro-max,ipad-pro-12,galaxy-s24-ultra
 ```
 
 ### Custom Port & Target
 ```bash
-npx deviceframe-pro --port 5000 --target http://localhost:8080
+npx device-frame-pro --port 5000 --target http://localhost:8080
 ```
 
 ### Enable Screenshots
@@ -174,37 +174,17 @@ ng serve
 npx deviceframe-pro --framework angular
 ```
 
-### Next.js
-```bash
-npm run dev
-npx deviceframe-pro --framework nextjs
-```
 
-### Nuxt
-```bash
-npm run dev
-npx deviceframe-pro --framework nuxt
-```
 
-### Svelte
-```bash
-npm run dev
-npx deviceframe-pro --framework svelte
-```
+
 
 ### Ionic
 ```bash
 ionic serve
-npx deviceframe-pro --framework ionic
+npx device-frame-pro --framework ionic
 ```
 
-### Generic / Any Framework
-```bash
-npm start
-npx deviceframe-pro
-```
 
-## 📸 Screenshot Feature
 
 ### Requirements
 ```bash
@@ -212,17 +192,10 @@ npm install puppeteer
 ```
 
 ### Usage
-1. Enable screenshots: `npx deviceframe-pro --screenshots`
 2. Select any device from the list
 3. Click the **📸** button above the device
-4. Screenshot automatically downloads
 
-### Screenshot Details
-- **Format:** PNG (high quality)
-- **Location:** `./screenshots/` directory
-- **Naming:** `device-id-timestamp.png`
-- **Quality:** 90% (adjustable)
-- **Size:** 50KB - 500KB depending on device
+
 
 ## 🌟 Key Features Explained
 
@@ -245,16 +218,7 @@ npm install puppeteer
 - Smart zoom calculations
 - Container-based responsive scaling
 
-## 🔧 Troubleshooting
 
-### Screenshots not working?
-```bash
-# Install Puppeteer
-npm install puppeteer
-
-# Restart the server
-npx deviceframe-pro --screenshots
-```
 
 ### Device too large/small?
 - Use the **Fit** button (bottom-right) to auto-adjust
@@ -263,12 +227,12 @@ npx deviceframe-pro --screenshots
 
 ### Port already in use?
 ```bash
-npx deviceframe-pro --port 5000
+npx device-frame-pro --port 5000
 ```
 
 ### Auto-detection not working?
 ```bash
-npx deviceframe-pro --target http://localhost:3000
+npx device-frame-pro --target http://localhost:3000
 ```
 
 ## 🤝 Contributing
